@@ -69,4 +69,4 @@ def login(request):
                 token = Token.objects.get(user=user)
             except: # если токена нет в базе данных, создайте новый токен
                 token = Token.objects.create(user=user)
-                return JsonResponse({'token':str(token)}, status=201)
+            return JsonResponse({'token':str(token)}, status=201)

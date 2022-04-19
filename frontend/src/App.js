@@ -30,10 +30,24 @@ function App() {
       });
   }
   async function logout() {
-    setUser(null);
+    setToken('');
+    setUser('');
+    localStorage.setItem('token', '');
+    localStorage.setItem('user', '');
+
   }
   async function signup(user = null) { // default user to null
-    setUser(user);
+    TodoDataService.signup(user)
+      .then(response => {
+        setToken(response.data.token);
+        setUser(user.username);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', user.username);
+      })
+      .catch(e => {
+        console.log(e);
+        setError(e.toString());
+      })
   }
   return (
     <div className="App">
@@ -44,7 +58,7 @@ function App() {
             <Container>
               <Link class="nav-link" to={"/todos"}>Todos</Link>
               {user ? (
-                <Link class="nav-link">Logout ({user})</Link>
+                <Link class="nav-link" onClick={logout}>Logout ({user})</Link>
               ) : (
                 <>
                   <Link class="nav-link" to={"/login"}>Login</Link>
